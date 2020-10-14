@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import './App.css';
-
+import Recipe from './recipe'
 
 
 const App = ()=>{
@@ -11,23 +11,35 @@ const App = ()=>{
 
   const examplereq =  `https://api.edamam.com/search?q=${query}&app_id=${APP_ID}&app_key=${APP_KEY}`
 
-  const [counter,setcounter] = useState(0);
 
+  const [recipes,setrecipes] = useState([]) 
 
-  useEffect(()=>{
-    console.log("Effect used")
-  })
+  useEffect( ()=>{
+    getRecipes()
+
+  },[])
+
+  const iter = (recipes)=>{
+    <Recipe/>
+  }
+
+ const getRecipes = async ()=> {
+    const responce =  await fetch(examplereq) 
+    const data = responce.json();
+    setrecipes(data.hits)
+ }
+
 
   return(
     <div className="App">
         <form className="search-form">
           <input type="text" className="search-bar"/>
-          <button type="submit" className="search-button" onClick={()=>setcounter(counter+1)}>
-            {counter}
+          <button type="submit" className="search-button" >
+            Submit
           </button>
-
-
         </form>
+     
+       {iter()}
     </div>
   );
 }
